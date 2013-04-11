@@ -1,0 +1,12 @@
+#!/bin/env beesh
+
+SRCURL[0]="http://ftp.gnu.org/gnu/gmp/gmp-${PKGVERSION}.tar.bz2"
+
+PREFIX=${PREFIX_CROSSTOOLS}
+
+EXCLUDE+=( "${PREFIX}/share/info" )
+
+mee_configure() {
+    bee_configure \
+        --enable-cxx
+}

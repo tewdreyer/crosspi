@@ -1,0 +1,15 @@
+#!/bin/env beesh
+
+SRCURL[0]="http://ftp.gnu.org/gnu/mpfr/mpfr-${PKGVERSION}.tar.bz2"
+
+PREFIX=${PREFIX_CROSSTOOLS}
+
+EXCLUDE+=( "${PREFIX}/share/doc" )
+EXCLUDE+=( "${PREFIX}/share/info" )
+
+mee_configure() {
+    LDFLAGS="-Wl,-rpath,${LIBDIR}" \
+    bee_configure \
+        --with-gmp=${PREFIX} \
+        --enable-shared
+}

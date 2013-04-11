@@ -1,0 +1,18 @@
+#!/bin/env beesh
+
+SRCURL[0]=""
+
+BEE_CONFIGURE=none
+
+mee_build() {
+    true
+}
+
+mee_install() {
+
+    mkdir -pv ${D}${PREFIX_SYSTEM}/include
+    touch ${D}${PREFIX_SYSTEM}/include/limits.h
+
+    mkdir -pv ${D}${PREFIX_SYSTEM}/${PREFIX_SYSTEM%/*}
+    ln -s ${PREFIX_SYSTEM} ${D}${PREFIX_SYSTEM}/${PREFIX_SYSTEM}
+}

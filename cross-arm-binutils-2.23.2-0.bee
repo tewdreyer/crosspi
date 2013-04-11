@@ -1,0 +1,32 @@
+#!/usr/bin/env beesh
+
+SRCURL[0]="http://ftp.gnu.org/gnu/binutils/binutils-${PKGVERSION}.tar.bz2"
+
+PREFIX=${PREFIX_CROSSTOOLS}
+
+EXCLUDE+=( "${PREFIX}/share/man" )
+EXCLUDE+=( "${PREFIX}/share/info" )
+
+mee_configure() {
+    AR=ar \
+    AS=as \
+    bee_configure \
+        --host=${CLFS_HOST} \
+        --target=${CLFS_TARGET} \
+        --with-sysroot=${PREFIX_SYSTEM} \
+        --with-lib-path=${PREFIX_SYSTEM}/lib \
+        --enable-shared \
+        --disable-nls \
+        --disable-multilib
+}
+
+mee_build_pre() {
+    bee_build \
+        configure-host
+}
+
+mee_install_post() {
+    mkdir -pv  ${D}${PREFIX_SYSTEM}/include
+    
+    cp -v ${S}/include/libiberty.h ${D}${PREFIX_SYSTEM}/include
+}

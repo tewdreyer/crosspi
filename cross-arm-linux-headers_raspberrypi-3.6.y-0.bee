@@ -1,0 +1,26 @@
+#!/usr/bin/env beesh
+
+SRCURL[0]="https://github.com/raspberrypi/linux/archive/rpi-${PKGVERSION}.tar.gz"
+
+PREFIX=${PREFIX_SYSTEM}
+
+EXCLUDE+=( .install ..install.cmd )
+
+build_in_sourcedir
+
+mee_configure() {
+    start_cmd make mrproper \
+    ${BEE_MAKEFLAGS}
+}
+
+mee_build() {
+    ARCH=${CLFS_ARCH} \
+    bee_build \
+        headers_check
+}
+
+mee_install() {
+    start_cmd mkdir -pv ${D}${PREFIX}
+    start_cmd make ARCH=arm INSTALL_HDR_PATH=${D}${PREFIX} headers_install
+}
+

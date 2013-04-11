@@ -1,0 +1,40 @@
+#!/usr/bin/env beesh
+
+SRCURL[0]="http://ftp.gnu.org/gnu/glibc/glibc-${PKGVERSION}.tar.bz2"
+
+PREFIX=${PREFIX_SYSTEM}
+
+mee_patch_post() {
+    sed -e 's/-lgcc_eh//g' \
+        -i ${S}/Makeconfig
+}
+
+mee_configure() {
+    cat > config.cache <<-EOF
+	libc_cv_forced_unwind=yes
+	libc_cv_c_cleanup=yes
+	libc_cv_gnu89_inline=yes
+	libc_cv_ssp=no
+EOF
+
+    BUILD_CC="gcc" \
+    CC="${CLFS_TARGET}-gcc" \
+    AR="${CLFS_TARGET}-ar" \
+    RANLIB="${CLFS_TARGET}-ranlib" \
+    bee_configure \
+        --host=${CLFS_TARGET} \
+        --build=${CLFS_HOST} \
+        --with-tls \
+        --with-__thread \
+        --with-binutils=${PREFIX_CROSSTOOLS}/bin \
+        --with-headers=${INCLUDEDIR} \
+        --enable-add-ons \
+        --enable-kernel=2.6.0 \
+        --disable-profile \
+        --cache-file=config.cache
+}
+
+mee_install() {
+    bee_install \
+	install_root=${D}
+}
