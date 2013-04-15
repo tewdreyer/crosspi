@@ -2,8 +2,6 @@
 
 SRCURL[0]="http://ftp.gnu.org/gnu/glibc/glibc-${PKGVERSION}.tar.bz2"
 
-PREFIX=${PREFIX_SYSTEM}
-
 mee_patch_post() {
     sed -e 's/-lgcc_eh//g' \
         -i ${S}/Makeconfig
